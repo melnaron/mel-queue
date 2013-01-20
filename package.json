@@ -2,6 +2,7 @@
 	"name": "mel-queue",
 	"version": "0.0.1",
 	"description": "Queue - Simple queue engine",
+	"keywords": ["queue", "synchronous", "sync"],
 	"main": "queue.js",
 	"author": {
 		"name": "Dmitry Gureev",
