@@ -2,9 +2,11 @@ Queue - Simple queue engine
 ===========================
 
 Install:
+
 	npm install mel-queue
 
 Example usage:
+
 	var Queue = require('mel-queue');
 	var q = new Queue();
 	q.add(someAction0);
