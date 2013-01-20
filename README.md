@@ -17,3 +17,5 @@ Example usage:
 		console.log('Queue ended');
 	});
 	q.run();
+
+See `test/test.js` for complete test code...
