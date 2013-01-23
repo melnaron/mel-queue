@@ -25,7 +25,7 @@ var events = require('events');
  * @constructor
  */
 var Queue = function(store) {
-	this.store = store;
+	this.store = store || {};
 	this.queue = [];
 	events.EventEmitter.call(this);
 };
