@@ -1,5 +1,5 @@
-Queue - Simple queue engine
-===========================
+Queue - Simple queue engine for Node.js
+=======================================
 
 Install:
 
