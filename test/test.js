@@ -44,6 +44,4 @@ q.run();
 // Expected output:
 //   Action 0
 //   Action 1: act1
-//   * skipped: Action 2: act2 foo
-//   * skipped: Action 3: actLast moo car
 //   Queue ended

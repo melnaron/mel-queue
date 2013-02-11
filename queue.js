@@ -22,10 +22,12 @@ var events = require('events');
  * Queue model
  *
  * @param store {Object} - Optional, Queue store to transfer some vars between actions
+ * @param context {Object} - Optional [default: Queue instance], Queue context to run action with it (thisArg)
  * @constructor
  */
-var Queue = function(store) {
+var Queue = function(store, context) {
 	this.store = store || {};
+	this.context = context || this;
 	this.queue = [];
 	events.EventEmitter.call(this);
 };
@@ -51,8 +53,8 @@ Queue.prototype.add = function(fn, args) {
 /**
  * Run actions queue
  */
-Queue.prototype.run = function() {
-	this.next();
+Queue.prototype.run = function(args) {
+	this.next(args);
 	return this;
 };
 
@@ -74,11 +76,24 @@ Queue.prototype.next = function(args) {
 			args.push(this);
 		}
 
-		action.fn.apply(action.fn, args);
+		action.fn.apply(this.context, args);
 	}
 	else {
-		// Queue end, emit event
-		this.emit('end');
+		if (args === undefined) {
+			args = [];
+		}
+
+		// Push event name 'end' as first argument
+		if (typeof args === 'object') {
+			args.unshift('end');
+		}
+
+		// Push queue as last argument
+		if (typeof args === 'object') {
+			args.push(this);
+		}
+
+		this.emit.apply(this.context, args);
 	}
 	return this;
 };
