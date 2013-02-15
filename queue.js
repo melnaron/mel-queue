@@ -21,8 +21,8 @@ var events = require('events');
 /**
  * Queue model
  *
- * @param store {Object} - Optional, Queue store to transfer some vars between actions
- * @param context {Object} - Optional [default: Queue instance], Queue context to run action with it (thisArg)
+ * @param store {Object} - Optional, store to transfer some vars between actions
+ * @param context {Object} - Optional [default: Queue instance], "this" context for all actions and events
  * @constructor
  */
 var Queue = function(store, context) {
@@ -83,17 +83,15 @@ Queue.prototype.next = function(args) {
 			args = [];
 		}
 
-		// Push event name 'end' as first argument
 		if (typeof args === 'object') {
+			// Push event name 'end' as first argument
 			args.unshift('end');
-		}
 
-		// Push queue as last argument
-		if (typeof args === 'object') {
+			// Push queue object as last argument
 			args.push(this);
 		}
 
-		this.emit.apply(this.context, args);
+		this.emit.apply(this, args);
 	}
 	return this;
 };
@@ -112,6 +110,54 @@ Queue.prototype.skip = function(num) {
 		}
 	}
 	return this;
+};
+
+/**
+ * Custom emit method for custom context for event callbacks
+ *
+ * @param event {String}
+ */
+Queue.prototype.emit = function(event) {
+	// Check type of event argument
+	if (typeof event !== 'string') {
+		return;
+	}
+
+	// Remove event name from the function arguments list
+	delete arguments['0'];
+
+	// Create args array
+	var args = [];
+
+	// Pass all remaining arguments to args array
+	for (var i in arguments) {
+		if (arguments.hasOwnProperty(i)) {
+			args.push(arguments[i]);
+		}
+	}
+
+	// Check events registered
+	if ( ! this._events) {
+		return;
+	}
+
+	// Get callbacks for current event
+	var callbacks = this._events[event] || null;
+
+	// Check event callbacks
+	if ( ! callbacks) {
+		return;
+	}
+
+	// If just one callback registered normalize it to array of callbacks
+	if (typeof callbacks === 'function') {
+		callbacks = [ callbacks ];
+	}
+
+	// Call each callback with queue or custom context
+	for (var j = 0; j < callbacks.length; j++) {
+		callbacks[j].apply(this.context, args);
+	}
 };
 
 // Exports Queue constructor

@@ -8,34 +8,38 @@ var Player = function(name, level) {
 };
 
 Player.prototype.getPlayerName = function(q) {
-	var p = this;
+	var player = this;
 
 	// Imitate action with callback
 	setTimeout(function() {
-		console.log(p.name);
-		(q && q.next());
+		console.log(player.name);
+		q && q.next();
 	}, 200);
 };
 
 Player.prototype.getPlayerLevel = function(q) {
-	var p = this;
+	var player = this;
 
 	// Imitate action with callback
 	setTimeout(function() {
-		console.log(p.level);
-		(q && q.next());
+		console.log(player.level);
+		q && q.next();
 	}, 100);
 };
 
 // Create and run queue of synchronous actions with specified context:
 var p = new Player('Boo', 7);
-var q = new Queue(null, p); // <- variable "p" will be "this" context for running queue actions
+var q = new Queue(null, p); // <- variable "p" will be "this" context for all queue actions and events
 q.add(p.getPlayerName);
 q.add(p.getPlayerLevel);
+q.on('end', function() {
+	console.log('Player: '+this.name+'['+this.level+']');
+});
 q.run();
 
 // Expected output:
 //
 // Boo
 // 7
+// Player: Boo[7]
 //
