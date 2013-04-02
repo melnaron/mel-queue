@@ -26,9 +26,18 @@ var events = require('events');
  * @constructor
  */
 var Queue = function(store, context) {
+	// Custom variables store
 	this.store = store || {};
+
+	// "this" context for callbacks
 	this.context = context || this;
+
+	// Actions queue
 	this.queue = [];
+
+	// Pointers of started actions
+	this.activeActions = {};
+
 	events.EventEmitter.call(this);
 };
 
@@ -110,6 +119,45 @@ Queue.prototype.skip = function(num) {
 		}
 	}
 	return this;
+};
+
+/**
+ * Add pointer about started action
+ * @param name {String}
+ */
+Queue.prototype.started = function(name) {
+	if ( ! name) throw new Error('Name of action must be given');
+	(this.activeActions[name]) ? this.activeActions[name]++ : this.activeActions[name] = 1;
+};
+
+/**
+ * Remove pointer about finished action and emit "finish" event if no more active actions
+ * @param name {String}
+ */
+Queue.prototype.finished = function(name) {
+	if ( ! name) throw new Error('Name of action must be given');
+	(this.activeActions[name]) ? this.activeActions[name]-- : this.activeActions[name] = 0;
+
+	if (this.activeActions[name] <= 0) {
+		delete this.activeActions[name];
+	}
+
+	if (this.isAllFinished()) {
+		this.emit('finish');
+	}
+};
+
+/**
+ * Check for all finished actions
+ * @returns {Boolean}
+ */
+Queue.prototype.isAllFinished = function() {
+	for (var key in this.activeActions) {
+		if (this.activeActions.hasOwnProperty(key)) {
+			return false;
+		}
+	}
+	return true;
 };
 
 /**
