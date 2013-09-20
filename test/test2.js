@@ -1,5 +1,5 @@
 // Load modules
-var Queue = require('mel-queue');
+var Queue = require('../queue.js');
 
 // Define test data
 var users = [

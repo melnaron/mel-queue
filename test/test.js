@@ -1,5 +1,5 @@
 // Load modules
-var Queue = require('mel-queue');
+var Queue = require('../queue.js');
 
 // Define test actions
 function someAction0(queue) {
@@ -45,3 +45,4 @@ q.run();
 //   Action 0
 //   Action 1: act1
 //   Queue ended
+//

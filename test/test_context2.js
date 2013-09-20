@@ -1,5 +1,5 @@
 // Load modules
-var Queue = require('mel-queue');
+var Queue = require('../queue.js');
 
 // Create and run queue of synchronous actions with specified context:
 var q = new Queue(); // <- context variable is not set, Queue instance will be used

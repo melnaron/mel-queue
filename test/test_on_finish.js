@@ -1,5 +1,5 @@
 // Load modules
-var Queue = require('mel-queue');
+var Queue = require('../queue.js');
 
 // Create new actions queue
 var q = new Queue();
