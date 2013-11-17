@@ -29,8 +29,8 @@ var events = require('events');
 /**
  * Queue model
  *
- * @param store {Object} - Optional, store to transfer some vars between actions
- * @param context {Object} - Optional [default: Queue instance], "this" context for all actions and events
+ * @param [store] {Object} - Optional, store to transfer some vars between actions
+ * @param [context] {Object} - Optional [default: Queue instance], "this" context for all actions and events
  * @constructor
  */
 var Queue = function(store, context) {
@@ -56,7 +56,7 @@ util.inherits(Queue, events.EventEmitter);
  * Add an action to the end of the queue
  *
  * @param fn {Function} - Action
- * @param args {Array} - Optional, Default action arguments
+ * @param [args] {Array} - Optional, Default action arguments
  *
  * @returns {Object} - This queue
  */
@@ -73,7 +73,7 @@ Queue.prototype.add = function(fn, args) {
  * Insert an action to the front of the queue
  *
  * @param fn {Function} - Action
- * @param args {Array} - Optional, Default action arguments
+ * @param [args] {Array} - Optional, Default action arguments
  *
  * @returns {Object} - This queue
  */
@@ -88,6 +88,10 @@ Queue.prototype.insert = function(fn, args) {
 
 /**
  * Run actions queue
+ *
+ * @param [args] {Array} - Optional, Default action arguments
+ *
+ * @returns {Object} - This queue
  */
 Queue.prototype.run = function(args) {
 	this.next(args);
@@ -97,7 +101,9 @@ Queue.prototype.run = function(args) {
 /**
  * Call next action in queue
  *
- * @param args {Array} - Optional, New action arguments
+ * @param [args] {Array} - Optional, New action arguments
+ *
+ * @returns {Object} - This queue
  */
 Queue.prototype.next = function(args) {
 	if (this.queue.length) {
@@ -136,6 +142,8 @@ Queue.prototype.next = function(args) {
  * Skip 'num' of next action(s)
  *
  * @param num {Number}
+ *
+ * @returns {Object} - This queue
  */
 Queue.prototype.skip = function(num) {
 	if (num > 0) {
@@ -150,6 +158,7 @@ Queue.prototype.skip = function(num) {
 
 /**
  * Add pointer about started action
+ *
  * @param name {String}
  */
 Queue.prototype.started = function(name) {
@@ -159,6 +168,7 @@ Queue.prototype.started = function(name) {
 
 /**
  * Remove pointer about finished action and emit "finish" event if no more active actions
+ *
  * @param name {String}
  */
 Queue.prototype.finished = function(name) {
@@ -176,6 +186,7 @@ Queue.prototype.finished = function(name) {
 
 /**
  * Check for all finished actions
+ *
  * @returns {Boolean}
  */
 Queue.prototype.isAllFinished = function() {

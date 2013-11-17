@@ -1,6 +1,6 @@
 {
 	"name": "mel-queue",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"description": "Queue - Simple queue engine for Node.js",
 	"keywords": ["queue", "synchronous", "sync"],
 	"main": "queue.js",
